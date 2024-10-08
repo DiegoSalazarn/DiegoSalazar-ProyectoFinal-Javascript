@@ -22,21 +22,21 @@ const stockProductos = [
 
 // Límites de compra por producto
 const productLimits = {
-  "0": limiteDeProducto = 3,  
-  "1": limiteDeProducto = 1,  
-  "2": limiteDeProducto = 2,  
-  "3": limiteDeProducto = 3, 
-  "4": limiteDeProducto = 1,  
-  "5": limiteDeProducto = 5,  
-  "6": limiteDeProducto = 4,
-  "7": limiteDeProducto = 2,
-  "8": limiteDeProducto = 4,
-  "9": limiteDeProducto = 2,
-  "10": limiteDeProducto = 2,
-  "11": limiteDeProducto = 4,
-  "12": limiteDeProducto = 1,
-  "13": limiteDeProductolimiteDeProducto = 3,
-  "14": limiteDeProductolimiteDeProducto = 6
+  "0": 3,  
+  "1": 1,  
+  "2": 2,  
+  "3": 3, 
+  "4": 1,  
+  "5": 5,  
+  "6": 4,
+  "7": 2,
+  "8": 4,
+  "9": 2,
+  "10": 2,
+  "11": 4,
+  "12": 1,
+  "13": 3,
+  "14": 6
 };
 
 // Carrito de compras
@@ -47,7 +47,6 @@ function saveCartToLocalStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
 }
 
-// Función para cargar carrito desde LocalStorage
 function loadCartFromLocalStorage() {
     const storedCart = localStorage.getItem(STORAGE_KEY);
     if (storedCart) {
@@ -95,7 +94,7 @@ function renderProductCards() {
 
 // Función para actualizar el carrito en pantalla y el contador del carrito
 function updateCart() {
-    const cartItems = document.getElementById('cart-items');
+    const cartItems = document.getElementById('cart-items-sidebar');
     const cartCount = document.getElementById('cart-count');
     let total = 0;
     let cartHTML = '';
@@ -113,7 +112,7 @@ function updateCart() {
     });
 
     cartItems.innerHTML = cartHTML;
-    document.getElementById('total-price').innerText = `Total: ${total}$`;
+    document.getElementById('total-price-sidebar').innerText = `Total: ${total}$`;
 
     // Actualizar el contador de productos en el ícono del carrito
     cartCount.textContent = cart.length;
@@ -146,7 +145,7 @@ function addToCart(productId) {
 // Cambiar la cantidad del producto en el carrito respetando el límite
 function changeQuantity(productId, amount) {
     const productIndex = cart.findIndex(item => item.product.id === productId);
-    const limit = productLimits[productId]; // Obtener el límite de este producto
+    const limit = productLimits[productId];
 
     if (productIndex !== -1) {
         const newQuantity = cart[productIndex].quantity + amount;
@@ -186,7 +185,64 @@ function assignAddToCartEvents() {
     });
 }
 
-// Función para inyectar el modal en el DOM
+// Inyección dinámica del sidebar
+function renderCartSidebar() {
+    const sidebarContainer = document.createElement('div');
+    sidebarContainer.innerHTML = `
+        <div id="cart-sidebar" class="cart-sidebar" style="position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background-color: #f8f9fa; box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5); overflow-y: auto; transition: right 0.4s ease; z-index: 1000;">
+            <div class="cart-sidebar-content" style="padding: 20px;">
+                <span class="close-sidebar" style="font-size: 28px; font-weight: bold; color: #333; cursor: pointer;">&times;</span>
+                <h2>Tu Carrito</h2>
+                <div id="cart-items-sidebar"></div>
+                <p id="total-price-sidebar">Total: 0$</p>
+                <button id="finalizar-compra" class="btn btn-primary mt-3">Finalizar Compra</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(sidebarContainer);
+
+    // Lógica para cerrar el sidebar
+    document.querySelector('.close-sidebar').addEventListener('click', function() {
+        closeCartSidebar();
+    });
+
+    // Evento del botón "Finalizar Compra" para abrir el modal de datos del usuario
+    document.getElementById('finalizar-compra').addEventListener('click', function() {
+        const modalDatos = document.getElementById('modal-datos');
+        if (cart.length === 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "El carrito está vacío.",
+            });
+        } else {
+            modalDatos.style.display = 'block'; // Mostrar el modal de datos
+        }
+    });
+}
+
+// Función para abrir el sidebar del carrito
+function openCartSidebar() {
+    const sidebar = document.getElementById('cart-sidebar');
+    sidebar.style.right = '0'; // Mostrar el sidebar
+}
+
+// Función para cerrar el sidebar del carrito
+function closeCartSidebar() {
+    const sidebar = document.getElementById('cart-sidebar');
+    sidebar.style.right = '-300px'; // Ocultar el sidebar
+}
+
+// Evento para abrir el sidebar cuando se haga clic en el ícono del carrito
+document.querySelector('.navbar-cart a').addEventListener('click', function(event) {
+    event.preventDefault();
+    openCartSidebar(); // Abrir el sidebar del carrito
+});
+
+// Inyectar el sidebar al cargar la página
+renderCartSidebar();
+
+// Función para inyectar el modal de datos del usuario
 function renderUserModal() {
     const modalContainer = document.createElement('div');
     modalContainer.innerHTML = `
@@ -212,140 +268,23 @@ function renderUserModal() {
     `;
     
     document.body.appendChild(modalContainer);
-    setupModalEvents();
-}
 
-// Función para configurar los eventos del modal
-function setupModalEvents() {
+    // Configuración de eventos del modal
     const modalDatos = document.getElementById('modal-datos');
     const spanClose = modalDatos.querySelector('.close');
-    const formDatos = document.getElementById('form-datos');
-
-    spanClose.addEventListener('click', () => {
-        modalDatos.style.display = 'none';
-    });
-
+    spanClose.addEventListener('click', () => modalDatos.style.display = 'none');
+    
     window.onclick = function(event) {
         if (event.target == modalDatos) {
             modalDatos.style.display = 'none';
         }
     };
-
-    // Evento para enviar el formulario y procesar los datos del usuario
-    formDatos.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const nombre = document.getElementById('nombre').value;
-        const email = document.getElementById('email').value;
-        const direccion = document.getElementById('direccion').value;
-
-        console.log(`Nombre: ${nombre}, Email: ${email}, Dirección: ${direccion}`);
-
-        // Aquí podrías guardar los datos del usuario o realizar alguna acción
-
-        // Cerrar el modal al enviar los datos
-        modalDatos.style.display = 'none';
-    });
 }
 
-// Evento para abrir el modal cuando se haga clic en "Finalizar Compra"
-document.getElementById('finalizar-compra').addEventListener('click', function() {
-    const modalDatos = document.getElementById('modal-datos');
-    if (cart.length === 0) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "El carrito está vacío.",
-        });
-    } else {
-        modalDatos.style.display = 'block';
-    }
-});
+// Inyectar el modal de usuario al cargar la página
+renderUserModal();
 
-// Función para inyectar el modal de resumen de compras en el DOM
-function renderResumenModal() {
-    const modalContainer = document.createElement('div'); // Crear un contenedor para el modal
-    modalContainer.innerHTML = `
-        <!-- Modal para mostrar el resumen de compra -->
-        <div id="modal-resumen" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Resumen de la Compra</h2>
-                <p id="resumen-detalles"></p>
-                <button id="cerrar-resumen" class="btn btn-secondary">Comprar</button>
-            </div>
-        </div>
-    `;
-    
-    // Inyectar el modal en el body
-    document.body.appendChild(modalContainer);
-
-    // Asignar la lógica para abrir y cerrar el modal
-    setupResumenModalEvents();
-}
-
-// Función para configurar los eventos del modal de resumen
-function setupResumenModalEvents() {
-    const modalResumen = document.getElementById('modal-resumen');
-    const spanClose = modalResumen.querySelector('.close');
-    const btnCerrarResumen = document.getElementById('cerrar-resumen');
-
-    // Evento para cerrar el modal al hacer clic en la "X"
-    spanClose.addEventListener('click', () => {
-        modalResumen.style.display = 'none';
-    });
-
-    // Evento para cerrar el modal al hacer clic en el botón "Cerrar"
-    btnCerrarResumen.addEventListener('click', () => {
-        modalResumen.style.display = 'none';
-    });
-
-    // Cerrar el modal si se hace clic fuera del contenido
-    window.onclick = function(event) {
-        if (event.target == modalResumen) {
-            modalResumen.style.display = 'none';
-        }
-    };
-}
-
-// Función para mostrar el resumen del carrito en el modal
-function showCartSummary() {
-    const modalResumen = document.getElementById('modal-resumen');
-    const resumenDetalles = document.getElementById('resumen-detalles');
-    
-    // Generar el contenido del resumen
-    let resumenHTML = "";
-    let total = 0;
-
-    if (cart.length === 0) {
-        resumenHTML = "<p>El carrito está vacío.</p>";
-    } else {
-        resumenHTML += "<strong>Productos:</strong><br>";
-        cart.forEach(item => {
-            resumenHTML += `- ${item.product.descripcion}: $${item.product.precio} x ${item.quantity}<br>`;
-            total += item.product.precio * item.quantity;
-        });
-        resumenHTML += `<br><strong>Total a pagar:</strong> $${total}`;
-    }
-    resumenDetalles.innerHTML = resumenHTML;
-    modalResumen.style.display = 'block';
-}
-
-// Evento para abrir el modal de resumen cuando se finalice la compra
-document.getElementById('finalizar-compra').addEventListener('click', function() {
-    if (cart.length === 0) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "El carrito está vacío.",
-        });
-    } else {
-        showCartSummary();
-    }
-});
-
-// Llamar a las funciones para renderizar modales, cargar el carrito y los productos
-renderResumenModal();
+// Cargar el carrito desde LocalStorage y renderizar los productos
 loadCartFromLocalStorage();
 renderProductCards();
 updateCart();
