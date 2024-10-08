@@ -1,0 +1,74 @@
+    /*TODO EL INDEX HASTA AVISAR CAMBIO DE PAGINA*/
+
+/*Primer titulo h1 index*/
+body{
+    background-color: grey;
+}
+
+.linea-blanca{
+    background-color: white;
+    
+}
+
+.linea-blanca p{
+    margin-bottom: 0px;
+    font-size: 3px;
+}
+.titulo-index h1{
+    font-family: serif;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    color: #fbfbf4;
+    margin-top: 0px;
+    padding: 0%;
+}
+
+    /*PAGE- Articulos*/
+    .title-article h1{
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    color: #fbfbf4;
+    margin-bottom: 20px;
+    margin-top: 0px;
+    }
+
+    .title-article h2 {
+        font-size: 30px;
+        display: flex;
+        justify-content: center;
+        color: #fbfbf4;
+        margin-bottom: 20px;
+        margin-top: 0px;
+      }
+
+    /*PAGE- Contacto*/
+    
+.primary-titleForm h1{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 35px;
+    display: flex ;
+    justify-content: center;
+    background-color:  black;
+    color: #fbfbf4;
+    margin-top: 0px;
+}
+
+    /*PAGE - Faqs*/
+ .pf-titulo{
+    background-color: black;
+    color: #fbfbf4;
+}
+
+    /*PAGE - Quienes Somos*/
+
+.qs_title{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-top: 0px;
+    border-style: double;
+    border-color: black;
+}
+    

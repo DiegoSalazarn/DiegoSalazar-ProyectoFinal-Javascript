@@ -1,0 +1,53 @@
+            /*NAVBAR GENERAL*/
+
+/*buscador del navbar*/
+.buscador-navbar{
+    display: flex;
+    justify-content: right;
+}
+
+/*btn buscar*/
+.btn-outline-success{
+    color: #8BE9B5;
+}
+
+    /*IMG DEL LOGO DE NAVBAR*/
+.logo-navbar{
+    transition: transform 0.2s ease;
+    
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+/*Separacion de "inicio|articulos|etc.."*/
+.navbar-nav li{
+    margin-left: 50px;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.navbar-expand-lg{
+    background-color: #742525;
+}
+
+.nav-link{
+    color: #fbfbf4;
+}
+    /*Para centrar más las cosas del navbar*/
+#navbarNav{
+    display: flex;
+    justify-content: space-around;
+}
+
+.navbar-nav{
+    margin: auto;
+
+}
+
+.navbar-collapse{
+    justify-content: space-between;
+}

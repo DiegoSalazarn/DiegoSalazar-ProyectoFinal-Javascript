@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="diego-salazar, Desarrollador frontend">
+    <meta name="keywords" content="tienda de ropa, remeras, buzos, sueteres, chaquetas, pantalones, diseño de ropa, venta de ropa, internet argentina, busqueda de ropa, articulos de tienda, ropa de marca">
+    <!-- HTML Meta Tags -->
+    <meta name="description" content="Tienda de ropa con acceso a Conjuntos opcionales, Remeras, buzos, pantalones y demás, Tienda de ropa administrativa en venta de productos locales nacionales">
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:url" content="https://diegosalazarn.github.io/pf-diego-salazar-coderhouse/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="OversizeLook - Tienda de ropa">
+    <meta property="og:description" content="Tienda de ropa con acceso a Conjuntos opcionales, Remeras, buzos, pantalones y demás, Tienda de ropa administrativa en venta de productos locales nacionales">
+    <meta property="og:image" content="https://i.postimg.cc/zvsyYSc2/tienda.jpg">
+    <meta property="og:image:width" content="500">
+    <meta property="og:image:height" content="626">
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="diegosalazarn.github.io">
+    <meta property="twitter:url" content="https://diegosalazarn.github.io/pf-diego-salazar-coderhouse/">
+    <meta name="twitter:title" content="OversizeLook - Tienda de ropa">
+    <meta name="twitter:description" content="Tienda de ropa con acceso a Conjuntos opcionales, Remeras, buzos, pantalones y demás, Tienda de ropa administrativa en venta de productos locales nacionales">
+    <meta name="twitter:image" content="https://i.postimg.cc/zvsyYSc2/tienda.jpg">
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <!--BS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!--CSS main-->
+    <link rel="stylesheet" href="./css/main.css">
+    <title>OversizeLook - Tienda de ropa exclusiva</title>
+</head>
+<body>
+    
+    <header>
+
+        <nav class="navbar navbar-expand-lg">
+          <div class="container-fluid">
+              <!--Logo-navbar (imagen)-->
+              <div class="logo-navbar">
+                  <div class="container">
+                      <a class="navbar-brand" href="./index.html">
+                      <img src="./assets/oversizelook.jpg" alt="logo-OversizeLook" title="Logo-navbar" width="50" height="40">
+                      </a>
+                  </div>
+              </div>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="./index.html">Inicio</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./pages/articulos.html">Articulos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./pages/contacto.html">Contacto</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./pages/faqs.html">Faqs</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./pages/quienes-somos.html">Quienes Somos</a>
+                  </li>
+                </ul>
+              </div>
+                <!--Buscador-navbar-->
+              <div class="buscador-navbar">
+                <div class="container-fluid">
+                  <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="¿Que Busca?" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+         </nav>
+         <div class="linea-blanca">
+         <p>.</p>
+        </div>
+          <!--Titulo Primary Index-->
+          <div class="titulo-index Dfz-sm">
+            <h1>
+                Oversizelook
+            </h1>
+          </div>
+
+    </header>
+
+    <main>
+        <!--Carrousel-->
+
+        <section class="carousel-inicio">
+          <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="./assets/buzo-nike.jpg" class="d-block w-100" title="buzo bi-color beige con negro y varios bolsillos" alt="buzo bi-color beige con negro y varios bolsillos">
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/pantalon3.jpg" class="d-block w-100" title="pantalon jean color negro con varios bolsillos" alt="pantalon jean color negro con varios bolsillos">
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/remera-oversize.jpg" class="d-block w-100" title="Remera negra con diseño blanco debajo" alt="Remera negra con diseño blanco debajo">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </section>
+
+          <!--Second title-->
+        <div class="second-title">
+          <h2>Temporada 2024</h2>
+        </div>
+
+              <!--CONTENEDORES CARD-->
+          
+        <section class="container mb-4">
+          <div class="row">
+
+            <!--contenedor 1-->
+
+            <div class="col-md-4 mb-4">
+              <div class="cards-index">
+                <div class="card">
+                    <img src="./assets/pantalon2.jpg" class="card-img-top" title="jagger verde con tirantes verdes" alt="jagger verde con tirantes verdes">
+                    <div class="card-body">
+                    <p class="card-text">Pantalones Oversizelook de Buena calidad, Jaggers/jeans</p>
+                    </div>
+                    <a href="./pages/articulos.html#pantalones" class="btn btn-primary">Pantalones</a>
+                </div>
+              </div>
+            </div>
+
+            <!--contenedor 2-->
+
+            <div class="col-md-4 mb-4">
+              <div class="cards-index">
+                <div class="card">
+                    <img src="./assets/remera-oversize-blanca.jpg" class="card-img-top" title="remera blanca con diseño de flamas" alt="remera blanca con diseño de flamas">
+                    <div class="card-body">
+                    <p class="card-text">Remeras Oversize de calidad, buenos diseños y buenos precios</p>
+                    </div>
+                    <a href="./pages/articulos.html#remeras" class="btn btn-primary">Remeras</a>
+                </div>
+              </div>
+            </div>
+            <!--contenedor 3-->
+            <div class="col-md-4 mb-4">
+              <div class="cards-index">
+                <div class="card">
+                    <img src="./assets/buzo-nike4.jpg" class="card-img-top" title="buzo color violeta con negro" alt="buzo de color violeta con negro">
+                    <div class="card-body">
+                    <p class="card-text">Buzos de buena clase con diseños unicos, ¡aproveche los descuentos!</p>
+                    </div>
+                    <a href="./pages/articulos.html#buzos" class="btn btn-primary">Buzos</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="parrafo-index Dfz-sm imagen-index contenedor">
+          <img src="./assets/img-index.jpg" title="modelo con trensa de pelo con remera negra" alt="modelo con trensa de pelo con remera negra">
+          <p>Nuestra temporada de ropa del 2024 es unica en su estilo, tenemos calidad de textura y diseño, diseños unicos e inigualables, traemos descuentos según las fechas, Puedes ver nuestros diseños en <a href="./pages/articulos.html">articulos</a></p>
+        </div>
+
+    </main>
+
+    <footer>
+
+      <div class="logo-footer">
+        <img src="./assets/oversizelook.jpg" title="Logo-footer" alt="Logo-footer">
+      </div>
+
+        <!--JAVASCRIPT-->
+        <script src="./js/main.js"></script>
+
+        <!--BS script-->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+    </footer>
+</body>
+</html>

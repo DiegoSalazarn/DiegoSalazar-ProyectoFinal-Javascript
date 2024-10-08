@@ -1,0 +1,11 @@
+//reset
+@import "./config/reset";
+@import "./config/vars";
+@import "./config/mixin";
+
+//Layout - Estructura HTML
+@import "./navbar";
+@import "./carrousel";
+@import "./cabeza";
+@import "./torso";
+@import "./pie";

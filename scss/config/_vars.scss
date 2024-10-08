@@ -1,0 +1,25 @@
+/*M A P A S*/
+
+$color-title:(
+    black: black
+);
+// chacha - chichi
+@each $chacha, $chichi in $color-title{
+    .color-title-#{$chacha}{
+        background-color:$chichi;
+    }
+}
+//Declaramos el mapa a leer
+$my-font-sizes:(
+    xs:     10px,
+    sm:     2em,
+    md:     20px,
+    xl:     25px,
+);
+//
+//Formato - talle
+@each $formato, $talle in $my-font-sizes{
+    .Dfz-#{$formato}{
+        font-size: $talle;
+    }
+}

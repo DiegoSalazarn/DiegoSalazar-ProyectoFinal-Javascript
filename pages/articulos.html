@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="diego-salazar, Desarrollador frontend">
+    <meta name="keywords" content="tienda de ropa, remeras, buzos, sueteres, chaquetas, pantalones, diseño de ropa, venta de ropa, internet argentina, busqueda de ropa, articulos de tienda, ropa de marca">
+    <!-- HTML Meta Tags -->
+    <meta name="description" content="articulos coleccion 2024, mejores prendas de oversizelook, prendas superiores, prendas inferiores, buzos, remeras, pantalones, venta de productos locales nacionales, ventas al mayor">
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:url" content="https://diegosalazarn.github.io/pf-diego-salazar-coderhouse/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="OversizeLook - Tienda de ropa">
+    <meta property="og:description" content="articulos coleccion 2024, mejores prendas de oversizelook, prendas superiores, prendas inferiores, buzos, remeras, pantalones, venta de productos locales nacionales, ventas al mayor">
+    <meta property="og:image" content="https://i.postimg.cc/zvsyYSc2/tienda.jpg">
+    <meta property="og:image:width" content="500">
+    <meta property="og:image:height" content="626">
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="diegosalazarn.github.io">
+    <meta property="twitter:url" content="https://diegosalazarn.github.io/pf-diego-salazar-coderhouse/">
+    <meta name="twitter:title" content="OversizeLook - Tienda de ropa">
+    <meta name="twitter:description" content="articulos coleccion 2024, mejores prendas de oversizelook, prendas superiores, prendas inferiores, buzos, remeras, pantalones, venta de productos locales nacionales, ventas al mayor">
+    <meta name="twitter:image" content="https://i.postimg.cc/zvsyYSc2/tienda.jpg">
+    <!--BS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!--CSS main-->
+    <link rel="stylesheet" href="../css/main.css">
+    <title>Articulos</title>
+</head>
+<body>
+    <header>
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <!--Logo-navbar (imagen)-->
+          <div class="logo-navbar">
+                <div class="container">
+                    <a class="navbar-brand" href="../index.html">
+                    <img src="../assets/oversizelook.jpg" title="logo-navbar" alt="Logo-OversizeLook" width="50" height="40">
+                    </a>
+                </div>
+          </div>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="../index.html">inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./articulos.html">Articulos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./contacto.html">Contacto</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./faqs.html">faqs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./quienes-somos.html">Quienes Somos</a>
+              </li>
+            </ul>
+          </div>
+            <!--Buscador-navbar-->
+          <div class="buscador-navbar">
+            <div class="container-fluid">
+              <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="¿Que Busca?" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Buscar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="linea-blanca">
+        <p>.</p>
+    </div>
+    <div id="remeras">
+</header>
+<main>
+    <div id="products-container" class="container mb-4">
+        <!-- Aquí se inyectan las cards desde JavaScript -->
+    </div>
+    
+    <!--CARRITO DE COMPRAS-->
+    <div id="cart" class="container mb-4">
+        <h2>Carrito de Compras</h2>
+        <div id="cart-items"></div>
+        <p id="total-price">Total: 0$</p>
+    </div>
+    
+    <!-- Botón para finalizar compra -->
+    <button id="finalizar-compra" class="btn btn-success mt-4">Finalizar Compra</button>
+    
+    <!-- Modal para ingresar datos del usuario -->
+    <div id="modal-datos" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Datos del Usuario</h2>
+            <form id="form-datos">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+                
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" required>
+                
+                <button type="submit" class="btn btn-primary mt-3">Enviar Datos</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para mostrar el resumen de compra -->
+    <div id="modal-resumen" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Resumen de la Compra</h2>
+            <p id="resumen-detalles"></p>
+            <button id="cerrar-resumen" class="btn btn-secondary">Cerrar</button>
+        </div>
+    </div>
+
+
+
+    </main>
+
+    <footer>
+
+        <div class="logo-footer">
+          <img src="../assets/oversizelook.jpg" title="logo-footer" alt="Logo-footer">
+        </div>
+
+    </footer>
+
+        <!--JAVASCRIPT-->
+        <script src="../js/main.js"></script>
+
+</body>
+</html>

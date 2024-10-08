@@ -1,0 +1,27 @@
+            /*CARROUSEL*/
+            .carousel-inicio img{
+                display: flex;
+                justify-content: center;
+                height: 500px;
+                margin: 1px;
+                margin-top: 10px;
+                padding: 20px 20px 20px 20px;
+                width: auto;
+            }
+            
+            .carousel-control-next{
+                background-color: darkgrey;
+                margin-right: 17px;
+                margin-bottom: 22px;
+                margin-top: 30px;
+                margin-left: 0px;
+            }
+            
+            .carousel-control-prev{
+                background-color: darkgray;
+                margin-right: 15px;
+                margin-bottom: 22px;
+                margin-top: 30px;
+                margin-left: 20px;
+            }
+            

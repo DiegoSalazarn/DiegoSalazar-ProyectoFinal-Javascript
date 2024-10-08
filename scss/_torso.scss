@@ -1,0 +1,211 @@
+    /*Segundo titulo h2 index*/
+    .second-title{
+        display: flex;
+        justify-content: center;
+        margin: 10px 10px 10px 10px ;
+        padding: 5px 5px 30px 5px;
+        color: #fbfbf4;
+    }
+    
+    /*3cards de el index*/
+
+    .cards-index{
+        transition: transform 0.2s ease;
+    
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    /*Color de los botones de las 3 cards del index*/
+    
+    .btn-primary{
+        background-color: brown;
+        margin-top: 10px;
+        --bs-btn-border-color: none
+    }
+
+
+    /*Parrafo de abajo de las cards*/
+    .parrafo-index p{
+        max-width: 600px; 
+        text-align: center; 
+        margin-left: 10px; 
+        background-color: #fbfbf4;
+        color: black;
+    }
+
+    .contenedor{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Imagen que está debajo de las cards*/
+        .imagen-index {
+            display: flex; // flexbox para alinear horizontalmente
+            justify-content: space-around; // Distribuye el espacio alrededor de las imágenes
+          
+            // Estilo para cada imagen dentro del contenedor
+            img {
+              width: 350px; // Ancho de cada imagen
+              height: 500px; // Altura automática para mantener la proporción
+              margin: 0 10px; // Espacio entre las imágenes
+              border-style: groove; 
+              border-color: #fbfbf4; 
+              transition: transform 0.2s ease;
+    
+        &:hover {
+            transform: scale(1.1);
+        }   
+          }
+        }
+    /*PAGE - ARTICULOS*/
+.article-secondTitle h2{
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    color: #fbfbf4;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.article-thirdTitle{
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    color: #fbfbf4;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+        /*Cards de articulos*/
+        
+.card-body{
+    background-color: #fbfbf4;
+}
+.card-articulos{
+    background-color: gray;
+    max-width: 300px;
+    margin: auto;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.card-articulos img{
+    height: 200px;
+    object-fit: cover;
+    
+}
+
+/*PAGE - CONTACTO*/
+
+.container-formulario input{
+    background-color: #fbfbf4;
+}
+
+.email-container{
+    padding-top: 20px;
+    margin-right: 15px;
+}
+
+.form-select {
+    background-color: #fbfbf4;
+}
+
+.box-text textarea{
+    background-color: #fbfbf4;
+}
+
+.box-text label{
+    display: flex;
+    padding: 3px;
+}
+
+        /*PAGE DE FAQS*/
+
+.pregunta-faqs{
+    background-color: #fbfbf4;
+    color: black;
+    margin: 0px;
+}
+
+.respuestas p{
+    padding-left: 6px;
+    padding-bottom: auto;
+    margin-bottom: 20px;
+    color: #fbfbf4;
+    border-style: groove;
+    border-color: black;
+    border-radius: 0.4px;
+}
+
+        /*PAGE DE QUIENES SOMOS*/
+        
+.qs_secondTitle{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+// Estilo para el contenedor de las imágenes
+.image-container {
+    display: flex; // flexbox para alinear horizontalmente
+    justify-content: space-around; // Distribuye el espacio alrededor de las imágenes
+  
+    // Estilo para cada imagen dentro del contenedor
+    img {
+      width: 350px; // Ancho de cada imagen
+      height: auto; // Altura automática para mantener la proporción
+      margin: 0 10px; // Espacio entre las imágenes
+      border-style: groove; 
+      border-color: #fbfbf4;    
+  }
+}
+
+@keyframes spin-once {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .image {
+    width: 200px;
+    height: 200px;
+    transition: transform 0.3s ease;
+  }
+  
+  .image:hover {
+    animation: spin-once 1s forwards;
+  }
+
+
+.description_qs{
+    font-family: "Ubuntu", sans-serif;;
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-top: 20px;
+    color: #fbfbf4;
+    display: flex;
+    text-align: center;
+}
+
+.description_qs p{
+    margin-bottom: 1.5em;
+    margin-right: 4px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.description_qs_dos{
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-top: 20px;
+    background-color: rgb(13, 196, 13);
+    color: #fbfbf4;
+    display: flex;
+    justify-content: center;
+}
