@@ -128,6 +128,15 @@ function addToCart(productId) {
     if (productIndex !== -1) {
         if (cart[productIndex].quantity < limit) {
             cart[productIndex].quantity += 1;
+
+            // Mostrar alerta al añadir más cantidad del mismo producto
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: `Añadido ${product.descripcion} al carrito`,
+                showConfirmButton: false,
+                timer: 100
+            });
         } else {
             Swal.fire({
                 icon: "warning",
@@ -137,6 +146,15 @@ function addToCart(productId) {
         }
     } else {
         cart.push({ product, quantity: 1 });
+
+        // Mostrar alerta al añadir un nuevo producto al carrito
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `Añadido ${product.descripcion} al carrito`,
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
 
     updateCart();
@@ -201,7 +219,7 @@ function renderCartSidebar() {
     `;
     document.body.appendChild(sidebarContainer);
 
-    // Lógica para cerrar el sidebar
+    //cerrar el sidebar
     document.querySelector('.close-sidebar').addEventListener('click', function() {
         closeCartSidebar();
     });
@@ -216,73 +234,125 @@ function renderCartSidebar() {
                 text: "El carrito está vacío.",
             });
         } else {
-            modalDatos.style.display = 'block'; // Mostrar el modal de datos
+            modalDatos.style.display = 'block';
         }
     });
 }
-
-// Función para abrir el sidebar del carrito
+/*ABRIR EL SLIDERBAR*/
 function openCartSidebar() {
     const sidebar = document.getElementById('cart-sidebar');
-    sidebar.style.right = '0'; // Mostrar el sidebar
+    sidebar.style.right = '0';
 }
-
-// Función para cerrar el sidebar del carrito
 function closeCartSidebar() {
     const sidebar = document.getElementById('cart-sidebar');
-    sidebar.style.right = '-300px'; // Ocultar el sidebar
+    sidebar.style.right = '-300px';
 }
 
 // Evento para abrir el sidebar cuando se haga clic en el ícono del carrito
 document.querySelector('.navbar-cart a').addEventListener('click', function(event) {
     event.preventDefault();
-    openCartSidebar(); // Abrir el sidebar del carrito
+    openCartSidebar();
 });
 
-// Inyectar el sidebar al cargar la página
 renderCartSidebar();
 
-// Función para inyectar el modal de datos del usuario
-function renderUserModal() {
-    const modalContainer = document.createElement('div');
-    modalContainer.innerHTML = `
-        <!-- Modal para ingresar datos del usuario -->
-        <div id="modal-datos" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Datos del Usuario</h2>
-                <form id="form-datos">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" required>
-                    
-                    <label for="email">Correo electrónico:</label>
-                    <input type="email" id="email" name="email" required>
-                    
-                    <label for="direccion">Dirección:</label>
-                    <input type="text" id="direccion" name="direccion" required>
-                    
-                    <button type="submit" class="btn btn-primary mt-3">Enviar Datos</button>
-                </form>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modalContainer);
+// DATOS DEL FORMULARIO
+function showUserDataForm() {
+    Swal.fire({
+        title: 'Ingresa Tus Datos',
+        html: `
+            <form id="form-datos-swal">
+                <label for="nombre">Nombre y Apellido:</label>
+                <input type="text" id="nombre" class="swal2-input" placeholder="Nombre y Apellido" required>
 
-    // Configuración de eventos del modal
-    const modalDatos = document.getElementById('modal-datos');
-    const spanClose = modalDatos.querySelector('.close');
-    spanClose.addEventListener('click', () => modalDatos.style.display = 'none');
-    
-    window.onclick = function(event) {
-        if (event.target == modalDatos) {
-            modalDatos.style.display = 'none';
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" id="email" class="swal2-input" placeholder="Correo Electrónico" required>
+
+                <label for="direccion">Dirección | Locación:</label>
+                <input type="text" id="direccion" class="swal2-input" placeholder="Dirección" required><br>
+
+                <label for="provincia">Provincia:</label>
+                <select id="provincia" class="swal2-select" required>
+                    <option value="" disabled selected>Selecciona una provincia</option>
+                    <option value="Buenos Aires">Buenos Aires</option>
+                    <option value="CABA">Ciudad Autónoma de Buenos Aires</option>
+                    <option value="Catamarca">Catamarca</option>
+                    <option value="Chaco">Chaco</option>
+                    <option value="Chubut">Chubut</option>
+                    <option value="Córdoba">Córdoba</option>
+                    <option value="Corrientes">Corrientes</option>
+                    <option value="Entre Ríos">Entre Ríos</option>
+                    <option value="Formosa">Formosa</option>
+                    <option value="Jujuy">Jujuy</option>
+                    <option value="La Pampa">La Pampa</option>
+                    <option value="La Rioja">La Rioja</option>
+                    <option value="Mendoza">Mendoza</option>
+                    <option value="Misiones">Misiones</option>
+                    <option value="Neuquén">Neuquén</option>
+                    <option value="Río Negro">Río Negro</option>
+                    <option value="Salta">Salta</option>
+                    <option value="San Juan">San Juan</option>
+                    <option value="San Luis">San Luis</option>
+                    <option value="Santa Cruz">Santa Cruz</option>
+                    <option value="Santa Fe">Santa Fe</option>
+                    <option value="Santiago del Estero">Santiago del Estero</option>
+                    <option value="Tierra del Fuego">Tierra del Fuego</option>
+                    <option value="Tucumán">Tucumán</option>
+                </select><br>
+
+                <label for="ciudad">Ciudad:</label><br>
+                <input type="text" id="ciudad" class="swal2-input" placeholder="Ciudad" required>
+
+                <label for="codigo-postal">Código Postal:</label>
+                <input type="text" id="codigo-postal" class="swal2-input" placeholder="Código Postal" required>
+            </form>
+        `,
+        confirmButtonText: 'Ingresar Datos',
+        focusConfirm: false,
+        preConfirm: () => {
+            const nombre = Swal.getPopup().querySelector('#nombre').value;
+            const email = Swal.getPopup().querySelector('#email').value;
+            const direccion = Swal.getPopup().querySelector('#direccion').value;
+            const provincia = Swal.getPopup().querySelector('#provincia').value;
+            const ciudad = Swal.getPopup().querySelector('#ciudad').value;
+            const codigoPostal = Swal.getPopup().querySelector('#codigo-postal').value;
+
+            if (!nombre || !email || !direccion || !provincia || !ciudad || !codigoPostal) {
+                Swal.showValidationMessage('Por favor, completa todos los campos:)');
+                return false;
+            }
+
+            return { nombre, email, direccion, provincia, ciudad, codigoPostal };
         }
-    };
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const { nombre, email, direccion, provincia, ciudad, codigoPostal } = result.value;
+            
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Datos Enviados con éxito",
+                showConfirmButton: false,
+                timer: 2000
+            });
+
+            console.log(`Nombre: ${nombre}, Email: ${email}, Dirección: ${direccion}, Provincia: ${provincia}, Ciudad: ${ciudad}, Código Postal: ${codigoPostal}`);
+        }
+    });
 }
 
-// Inyectar el modal de usuario al cargar la página
-renderUserModal();
+// Evento para abrir el formulario de datos del usuario
+document.getElementById('finalizar-compra').addEventListener('click', function() {
+    if (cart.length === 0) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "El carrito está vacío.",
+        });
+    } else {
+        showUserDataForm();
+    }
+});
 
 // Cargar el carrito desde LocalStorage y renderizar los productos
 loadCartFromLocalStorage();
