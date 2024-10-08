@@ -20,6 +20,25 @@ const stockProductos = [
   { id: "14", descripcion: "Buzo nike Bi-Color / negro con blanco", precio: 50000, categoria: "buzos", img: "../assets/buzo-nike3.jpg" }
 ];
 
+// Límites de compra por producto
+const productLimits = {
+  "0": limiteDeProducto = 3,  
+  "1": limiteDeProducto = 1,  
+  "2": limiteDeProducto = 2,  
+  "3": limiteDeProducto = 3, 
+  "4": limiteDeProducto = 1,  
+  "5": limiteDeProducto = 5,  
+  "6": limiteDeProducto = 4,
+  "7": limiteDeProducto = 2,
+  "8": limiteDeProducto = 4,
+  "9": limiteDeProducto = 2,
+  "10": limiteDeProducto = 2,
+  "11": limiteDeProducto = 4,
+  "12": limiteDeProducto = 1,
+  "13": limiteDeProductolimiteDeProducto = 3,
+  "14": limiteDeProductolimiteDeProducto = 6
+};
+
 // Carrito de compras
 let cart = [];
 
@@ -70,17 +89,17 @@ function renderProductCards() {
         cardsHTML += '</div>';
     });
 
-    // Inyectar el HTML generado en el contenedor
     container.innerHTML = cardsHTML;
     assignAddToCartEvents();
 }
 
-// Función para actualizar el carrito en pantalla
+// Función para actualizar el carrito en pantalla y el contador del carrito
 function updateCart() {
     const cartItems = document.getElementById('cart-items');
+    const cartCount = document.getElementById('cart-count');
     let total = 0;
-
     let cartHTML = '';
+
     cart.forEach(item => {
         const subtotal = item.product.precio * item.quantity;
         cartHTML += `
@@ -96,16 +115,27 @@ function updateCart() {
     cartItems.innerHTML = cartHTML;
     document.getElementById('total-price').innerText = `Total: ${total}$`;
 
+    // Actualizar el contador de productos en el ícono del carrito
+    cartCount.textContent = cart.length;
     saveCartToLocalStorage();
 }
 
-// Función para añadir producto al carrito
+// Función para añadir producto al carrito con límite de cantidad
 function addToCart(productId) {
     const product = stockProductos.find(p => p.id === productId);
     const productIndex = cart.findIndex(item => item.product.id === productId);
+    const limit = productLimits[productId];
 
     if (productIndex !== -1) {
-        cart[productIndex].quantity += 1;
+        if (cart[productIndex].quantity < limit) {
+            cart[productIndex].quantity += 1;
+        } else {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: `No se pueden añadir más de ${limit} unidades de este producto.`,
+            });
+        }
     } else {
         cart.push({ product, quantity: 1 });
     }
@@ -113,17 +143,24 @@ function addToCart(productId) {
     updateCart();
 }
 
-// Cambiar la cantidad del producto en el carrito
+// Cambiar la cantidad del producto en el carrito respetando el límite
 function changeQuantity(productId, amount) {
     const productIndex = cart.findIndex(item => item.product.id === productId);
+    const limit = productLimits[productId]; // Obtener el límite de este producto
 
     if (productIndex !== -1) {
         const newQuantity = cart[productIndex].quantity + amount;
 
-        if (newQuantity > 0) {
-            cart[productIndex].quantity = newQuantity;
-        } else {
+        if (newQuantity > limit) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: `No se pueden añadir más de ${limit} unidades de este producto.`,
+            });
+        } else if (newQuantity <= 0) {
             cart.splice(productIndex, 1);
+        } else {
+            cart[productIndex].quantity = newQuantity;
         }
         updateCart();
     }
@@ -154,7 +191,7 @@ function renderUserModal() {
     const modalContainer = document.createElement('div');
     modalContainer.innerHTML = `
         <!-- Modal para ingresar datos del usuario -->
-        <div id="modal-datos" class="modal" style="display: none;">
+        <div id="modal-datos" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Datos del Usuario</h2>
@@ -306,14 +343,11 @@ document.getElementById('finalizar-compra').addEventListener('click', function()
         showCartSummary();
     }
 });
+
+// Llamar a las funciones para renderizar modales, cargar el carrito y los productos
 renderResumenModal();
-
-
-renderUserModal();
-
 loadCartFromLocalStorage();
-
 renderProductCards();
-
 updateCart();
+
 
