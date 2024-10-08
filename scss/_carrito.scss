@@ -1,5 +1,4 @@
 /*CARRITO DE COMPRAS MODAL*/
-
 .modal {
     display: none;
     position: fixed;
@@ -32,4 +31,9 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  /*BTON del resumen de compras para comprar el producto*/
+  .btn-secondary{
+    background-color: green;
   }

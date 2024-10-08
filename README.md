@@ -23,4 +23,6 @@ en el archivo _carrousel.scss se encuentra solo el carrousel para solo cambiar l
 
 en el archivo _torso.scss se encuentra todo el codigo que está dentro de la etiqueta "main" del html, está todo.
 
-y dento de el archivo _pie.scss estaría el footer, que sería el pie de pagina (el mismo archivo se llama así) se puede modificar a gusto tambien el footer.s
+y dento de el archivo _pie.scss estaría el footer, que sería el pie de pagina (el mismo archivo se llama así) se puede modificar a gusto tambien el footer.
+
+Todo el codigo estaria compuesto de JavaScript, HTML y CSS.

@@ -384,10 +384,7 @@ footer {
   padding: 20px;
 }
 
-/*# sourceMappingURL=main.css.map */
-
 /*CARRITO DE COMPRAS MODAL*/
-
 .modal {
   display: none;
   position: fixed;
@@ -421,3 +418,10 @@ footer {
   text-decoration: none;
   cursor: pointer;
 }
+
+/*BTON del resumen de compras para comprar el producto*/
+.btn-secondary {
+  background-color: green;
+}
+
+/*# sourceMappingURL=main.css.map */
