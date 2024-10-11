@@ -75,6 +75,28 @@
   justify-content: space-between;
 }
 
+.navbar-cart {
+  position: absolute;
+  top: 15px;
+  right: 30px;
+}
+
+.navbar-cart i {
+  font-size: 1.5rem;
+  color: #333;
+  position: relative;
+}
+
+#cart-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  color: white;
+}
+
 /*CARROUSEL*/
 .carousel-inicio img {
   display: flex;
@@ -422,6 +444,102 @@ footer {
 /*BTON del resumen de compras para comprar el producto*/
 .btn-secondary {
   background-color: green;
+}
+
+/* Estilos para el sidebar del carrito */
+#cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #f8f9fa;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  transition: right 0.4s ease;
+  z-index: 1000;
+}
+
+.cart-sidebar-content {
+  padding: 20px;
+}
+
+/* Estilo para el botón de cerrar el sidebar */
+.close-sidebar {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Estilo para los títulos de las categorías de productos */
+.title-article.color-title-black {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Estilo para las tarjetas de productos */
+.card-articulos {
+  margin-bottom: 20px;
+}
+
+.card-img-top {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+/* Estilos para el botón "Añadir al carrito" */
+.btn-primary {
+  color: #fff;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Estilo para los productos dentro del carrito */
+#cart-items-sidebar div {
+  margin-bottom: 10px;
+}
+
+/* Botones para aumentar y disminuir cantidad */
+#cart-items-sidebar button {
+  margin-left: 5px;
+}
+
+#total-price-sidebar {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#finalizar-compra {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background-color: #008000;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Transición al abrir el sidebar */
+#cart-sidebar.open {
+  right: 0;
+}
+
+/* Estilo general para el contenedor de productos */
+#products-container {
+  padding: 20px;
+}
+
+/* Estilo general para el cuerpo de la tarjeta */
+.card-title.Dfz-xl {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=main.css.map */

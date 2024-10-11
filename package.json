@@ -10,6 +10,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
     "sweetalert2": "^11.14.2"
-  }
+  },
+  "keywords": []
 }
