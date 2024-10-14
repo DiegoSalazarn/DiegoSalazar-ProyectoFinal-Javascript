@@ -1,39 +1,41 @@
 // Constante de almacenamiento en LocalStorage
 const STORAGE_KEY = "productosCarrito";
 
-// Stock de productos
-const stockProductos = [
-  { id: "0", descripcion: "Remera negra con diseño urbano", precio: 12000, categoria: "remeras", img: "../assets/remera-oversize.jpg" },
-  { id: "1", descripcion: "Remera blanca con diseño de flamas", precio: 12000, categoria: "remeras", img: "../assets/remera-oversize-blanca.jpg" },
-  { id: "2", descripcion: "Remera negra con diseño de rayos", precio: 13000, categoria: "remeras", img: "../assets/remera-oversize-rayos.jpg" },
-  { id: "3", descripcion: "Remera Negra Clasica", precio: 10000, categoria: "remeras", img: "../assets/remera-clasica-negra.jpg" },
-  { id: "4", descripcion: "Remera negra con diseño mariposa rosita", precio: 13000, categoria: "remeras", img: "../assets/remera-negra-estampada-mariposa.jpg" },
-  { id: "5", descripcion: "Remera blanca thythm estampado school", precio: 17000, categoria: "remeras", img: "../assets/remera-blanca-trythm.jpg" },
-  { id: "6", descripcion: "Pantalon tipo jagger negro", precio: 30000, categoria: "pantalones", img: "../assets/pantalon1.jpg" },
-  { id: "7", descripcion: "Jagger Verde oscuro con elastico", precio: 28000, categoria: "pantalones", img: "../assets/pantalon2.jpg" },
-  { id: "8", descripcion: "Jean negro, varios bolsillos", precio: 24999, categoria: "pantalones", img: "../assets/pantalon3.jpg" },
-  { id: "9", descripcion: "Jean negro clasico", precio: 26000, categoria: "pantalones", img: "../assets/pantalon4.jpg" },
-  { id: "10", descripcion: "Jagger color beige", precio: 28000, categoria: "pantalones", img: "../assets/pantalon5.jpg" },
-  { id: "11", descripcion: "Jean clasico / Camuflado militar", precio: 24999, categoria: "pantalones", img: "../assets/pantalon6.jpg" },
-  { id: "12", descripcion: "Buzo nike Bi-Color / Negro con beige", precio: 50000, categoria: "buzos", img: "../assets/buzo-nike.jpg" },
-  { id: "13", descripcion: "Buzo nike Clasico Bi-Color", precio: 45000, categoria: "buzos", img: "../assets/buzo-nike2.jpg" },
-  { id: "14", descripcion: "Buzo nike Bi-Color / negro con blanco", precio: 50000, categoria: "buzos", img: "../assets/buzo-nike3.jpg" }
-];
-
 // Carrito de compras
 let cart = [];
+let stockProductos = [];
+let productLimits = {};
 
 // Función para guardar carrito en LocalStorage
 function saveCartToLocalStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
 }
 
-// Función para cargar carrito desde LocalStorage
 function loadCartFromLocalStorage() {
     const storedCart = localStorage.getItem(STORAGE_KEY);
     if (storedCart) {
         cart = JSON.parse(storedCart);
     }
+}
+
+// Función para cargar productos desde el archivo JSON
+function loadProductsFromJSON() {
+    fetch('/data.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al cargar el archivo JSON');
+            }
+            return response.json();
+        })
+        .then(data => {
+            stockProductos = data.productos;
+            productLimits = data.limites;
+            renderProductCards();
+            updateCart();
+        })
+        .catch(error => {
+            console.error('Error al cargar el JSON:', error);
+        });
 }
 
 // Función para renderizar las cards de productos separadas por categorías
@@ -70,17 +72,27 @@ function renderProductCards() {
         cardsHTML += '</div>';
     });
 
-    // Inyectar el HTML generado en el contenedor
     container.innerHTML = cardsHTML;
     assignAddToCartEvents();
 }
 
-// Función para actualizar el carrito en pantalla
-function updateCart() {
-    const cartItems = document.getElementById('cart-items');
-    let total = 0;
+// Función para asignar eventos a los botones "Añadir al carrito"
+function assignAddToCartEvents() {
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-id');
+            addToCart(productId);
+        });
+    });
+}
 
+// Función para actualizar el carrito en pantalla y el contador del carrito
+function updateCart() {
+    const cartItems = document.getElementById('cart-items-sidebar');
+    const cartCount = document.getElementById('cart-count');
+    let total = 0;
     let cartHTML = '';
+
     cart.forEach(item => {
         const subtotal = item.product.precio * item.quantity;
         cartHTML += `
@@ -94,226 +106,255 @@ function updateCart() {
     });
 
     cartItems.innerHTML = cartHTML;
-    document.getElementById('total-price').innerText = `Total: ${total}$`;
+    document.getElementById('total-price-sidebar').innerText = `Total: ${total}$`;
 
+    // Actualizar el contador de productos en el ícono del carrito
+    cartCount.textContent = cart.length;
     saveCartToLocalStorage();
 }
 
-// Función para añadir producto al carrito
+// Función para añadir producto al carrito con límite de cantidad
 function addToCart(productId) {
     const product = stockProductos.find(p => p.id === productId);
     const productIndex = cart.findIndex(item => item.product.id === productId);
+    const limit = productLimits[productId];
 
     if (productIndex !== -1) {
-        cart[productIndex].quantity += 1;
+        if (cart[productIndex].quantity < limit) {
+            cart[productIndex].quantity += 1;
+
+            // Mostrar alerta al añadir más cantidad del mismo producto
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: `Añadido ${product.descripcion} al carrito`,
+                showConfirmButton: false,
+                timer: 100
+            });
+        } else {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: `No se pueden añadir más de ${limit} unidades de este producto.`,
+            });
+        }
     } else {
         cart.push({ product, quantity: 1 });
-    }
 
+        // Mostrar alerta al añadir un nuevo producto al carrito
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `Añadido ${product.descripcion} al carrito`,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
     updateCart();
 }
 
-// Cambiar la cantidad del producto en el carrito
-function changeQuantity(productId, amount) {
-    const productIndex = cart.findIndex(item => item.product.id === productId);
-
-    if (productIndex !== -1) {
-        const newQuantity = cart[productIndex].quantity + amount;
-
-        if (newQuantity > 0) {
-            cart[productIndex].quantity = newQuantity;
-        } else {
-            cart.splice(productIndex, 1);
-        }
-        updateCart();
-    }
-}
-
-// Eliminar producto del carrito
+// Función para eliminar un producto del carrito
 function removeFromCart(productId) {
     const productIndex = cart.findIndex(item => item.product.id === productId);
 
     if (productIndex !== -1) {
         cart.splice(productIndex, 1);
         updateCart();
+    } else {
+        console.error(`Producto con id ${productId} no encontrado en el carrito`);
     }
 }
 
-// Asignar eventos a los botones "Añadir al carrito"
-function assignAddToCartEvents() {
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', () => {
-            const productId = button.getAttribute('data-id');
-            addToCart(productId);
-        });
+// Función para mostrar el formulario de datos del usuario al finalizar la compra
+function showUserDataForm() {
+    Swal.fire({
+        title: 'Datos del comprador',
+        html: `
+            <label for="nombre">Nombre y Apellido:</label>
+            <input type="text" id="nombre" class="swal2-input" placeholder="Nombre y Apellido" required>
+
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" class="swal2-input" placeholder="Correo Electrónico" required><br>
+
+            <label for="direccion">Dirección:</label><br>
+            <input type="text" id="direccion" class="swal2-input" placeholder="Dirección" required><br>
+
+            <label for="provincia">Provincia:</label>
+            <select id="provincia" class="swal2-select" required>
+                <option value="" disabled selected>Selecciona una provincia</option>
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="CABA">Ciudad Autónoma de Buenos Aires</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Córdoba">Córdoba</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Formosa">Formosa</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Misiones">Misiones</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Salta">Salta</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="Tucumán">Tucumán</option>
+            </select>
+
+            <label for="ciudad">Ciudad:</label><br>
+            <input type="text" id="ciudad" class="swal2-input" placeholder="Ciudad" required>
+
+            <label for="codigo-postal">Código Postal:</label>
+            <input type="text" id="codigo-postal" class="swal2-input" placeholder="Código Postal" required>
+        `,
+        confirmButtonText: 'Confirmar Compra',
+        focusConfirm: false,
+        preConfirm: () => {
+            const nombre = Swal.getPopup().querySelector('#nombre').value;
+            const email = Swal.getPopup().querySelector('#email').value;
+            const direccion = Swal.getPopup().querySelector('#direccion').value;
+            const provincia = Swal.getPopup().querySelector('#provincia').value;
+            const ciudad = Swal.getPopup().querySelector('#ciudad').value;
+            const codigoPostal = Swal.getPopup().querySelector('#codigo-postal').value;
+
+            // Validar que todos los campos estén llenos
+            if (!nombre || !email || !direccion || !provincia || !ciudad || !codigoPostal) {
+                Swal.showValidationMessage('Por favor, completa todos los campos');
+                return false;
+            }
+            return { nombre, email, direccion, provincia, ciudad, codigoPostal };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const { nombre, email, direccion, provincia, ciudad, codigoPostal } = result.value;
+
+            // Enviar los datos a la API
+            sendPurchaseToAPI(nombre, email, direccion, provincia, ciudad, codigoPostal);
+
+            // Mensaje de éxito
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Compra finalizada con éxito",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                cart = [];
+                updateCart();
+            });
+        }
     });
 }
 
-// Función para inyectar el modal en el DOM
-function renderUserModal() {
-    const modalContainer = document.createElement('div');
-    modalContainer.innerHTML = `
-        <!-- Modal para ingresar datos del usuario -->
-        <div id="modal-datos" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Datos del Usuario</h2>
-                <form id="form-datos">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" required>
-                    
-                    <label for="email">Correo electrónico:</label>
-                    <input type="email" id="email" name="email" required>
-                    
-                    <label for="direccion">Dirección:</label>
-                    <input type="text" id="direccion" name="direccion" required>
-                    
-                    <button type="submit" class="btn btn-primary mt-3">Enviar Datos</button>
-                </form>
+// Función para enviar la compra a la API
+function sendPurchaseToAPI(nombre, email, direccion, provincia, ciudad, codigoPostal) {
+    const apiEndpoint = 'http://localhost:3000/api/compras';  // Asegúrate de que la URL esté correcta
+
+    // Construir los datos de la compra
+    const purchaseData = {
+        nombre: nombre,
+        email: email,
+        direccion: direccion,
+        provincia: provincia,
+        ciudad: ciudad,
+        codigoPostal: codigoPostal,
+        productos: cart.map(item => ({
+            descripcion: item.product.descripcion,  
+            cantidad: item.quantity,               
+            precio: item.product.precio              
+        }))
+    };
+
+    // Enviar la solicitud POST a la API
+    fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(purchaseData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la solicitud');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Compra procesada correctamente:', data);
+    })
+    .catch(error => {
+        console.error('Error al procesar la compra:', error);
+    });
+}
+
+// Inyectar dinámicamente el sidebar del carrito
+function renderCartSidebar() {
+    const sidebarContainer = document.createElement('div');
+    sidebarContainer.innerHTML = `
+        <div id="cart-sidebar" class="cart-sidebar">
+            <div class="cart-sidebar-content">
+                <span class="close-sidebar">&times;</span>
+                <h2>Tu Carrito</h2>
+                <div id="cart-items-sidebar"></div> <!-- Este elemento -->
+                <p id="total-price-sidebar">Total: 0$</p>
+                <button id="finalizar-compra" class="btn btn-primary">Finalizar Compra</button>
             </div>
         </div>
     `;
-    
-    document.body.appendChild(modalContainer);
-    setupModalEvents();
-}
+    document.body.appendChild(sidebarContainer);
 
-// Función para configurar los eventos del modal
-function setupModalEvents() {
-    const modalDatos = document.getElementById('modal-datos');
-    const spanClose = modalDatos.querySelector('.close');
-    const formDatos = document.getElementById('form-datos');
-
-    spanClose.addEventListener('click', () => {
-        modalDatos.style.display = 'none';
+    // Cerrar el sidebar
+    document.querySelector('.close-sidebar').addEventListener('click', function() {
+        closeCartSidebar();
     });
 
-    window.onclick = function(event) {
-        if (event.target == modalDatos) {
-            modalDatos.style.display = 'none';
+    // Evento del botón "Finalizar Compra" para abrir el modal de datos del usuario
+    document.getElementById('finalizar-compra').addEventListener('click', function() {
+        if (cart.length === 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "El carrito está vacío.",
+            });
+        } else {
+            showUserDataForm();
         }
-    };
-
-    // Evento para enviar el formulario y procesar los datos del usuario
-    formDatos.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const nombre = document.getElementById('nombre').value;
-        const email = document.getElementById('email').value;
-        const direccion = document.getElementById('direccion').value;
-
-        console.log(`Nombre: ${nombre}, Email: ${email}, Dirección: ${direccion}`);
-
-        // Aquí podrías guardar los datos del usuario o realizar alguna acción
-
-        // Cerrar el modal al enviar los datos
-        modalDatos.style.display = 'none';
     });
 }
 
-// Evento para abrir el modal cuando se haga clic en "Finalizar Compra"
-document.getElementById('finalizar-compra').addEventListener('click', function() {
-    const modalDatos = document.getElementById('modal-datos');
-    if (cart.length === 0) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "El carrito está vacío.",
-        });
-    } else {
-        modalDatos.style.display = 'block';
-    }
-});
-
-// Función para inyectar el modal de resumen de compras en el DOM
-function renderResumenModal() {
-    const modalContainer = document.createElement('div'); // Crear un contenedor para el modal
-    modalContainer.innerHTML = `
-        <!-- Modal para mostrar el resumen de compra -->
-        <div id="modal-resumen" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Resumen de la Compra</h2>
-                <p id="resumen-detalles"></p>
-                <button id="cerrar-resumen" class="btn btn-secondary">Comprar</button>
-            </div>
-        </div>
-    `;
-    
-    // Inyectar el modal en el body
-    document.body.appendChild(modalContainer);
-
-    // Asignar la lógica para abrir y cerrar el modal
-    setupResumenModalEvents();
+// Abrir y cerrar sidebar
+function openCartSidebar() {
+    const sidebar = document.getElementById('cart-sidebar');
+    sidebar.style.right = '0';
 }
 
-// Función para configurar los eventos del modal de resumen
-function setupResumenModalEvents() {
-    const modalResumen = document.getElementById('modal-resumen');
-    const spanClose = modalResumen.querySelector('.close');
-    const btnCerrarResumen = document.getElementById('cerrar-resumen');
-
-    // Evento para cerrar el modal al hacer clic en la "X"
-    spanClose.addEventListener('click', () => {
-        modalResumen.style.display = 'none';
-    });
-
-    // Evento para cerrar el modal al hacer clic en el botón "Cerrar"
-    btnCerrarResumen.addEventListener('click', () => {
-        modalResumen.style.display = 'none';
-    });
-
-    // Cerrar el modal si se hace clic fuera del contenido
-    window.onclick = function(event) {
-        if (event.target == modalResumen) {
-            modalResumen.style.display = 'none';
-        }
-    };
+function closeCartSidebar() {
+    const sidebar = document.getElementById('cart-sidebar');
+    sidebar.style.right = '-300px';
 }
 
-// Función para mostrar el resumen del carrito en el modal
-function showCartSummary() {
-    const modalResumen = document.getElementById('modal-resumen');
-    const resumenDetalles = document.getElementById('resumen-detalles');
-    
-    // Generar el contenido del resumen
-    let resumenHTML = "";
-    let total = 0;
+// Llamar a la función para inyectar el sidebar del carrito
+renderCartSidebar();
 
-    if (cart.length === 0) {
-        resumenHTML = "<p>El carrito está vacío.</p>";
-    } else {
-        resumenHTML += "<strong>Productos:</strong><br>";
-        cart.forEach(item => {
-            resumenHTML += `- ${item.product.descripcion}: $${item.product.precio} x ${item.quantity}<br>`;
-            total += item.product.precio * item.quantity;
-        });
-        resumenHTML += `<br><strong>Total a pagar:</strong> $${total}`;
-    }
-    resumenDetalles.innerHTML = resumenHTML;
-    modalResumen.style.display = 'block';
-}
-
-// Evento para abrir el modal de resumen cuando se finalice la compra
-document.getElementById('finalizar-compra').addEventListener('click', function() {
-    if (cart.length === 0) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "El carrito está vacío.",
-        });
-    } else {
-        showCartSummary();
-    }
-});
-renderResumenModal();
-
-
-renderUserModal();
-
+// Cargar el carrito desde LocalStorage y productos desde JSON
 loadCartFromLocalStorage();
+loadProductsFromJSON();
 
-renderProductCards();
+// Evento para abrir el sidebar cuando se haga clic en el ícono del carrito
+document.querySelector('.navbar-cart a').addEventListener('click', function(event) {
+    event.preventDefault();
+    openCartSidebar();
+});
 
-updateCart();
+
+
+
+
 
