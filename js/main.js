@@ -20,7 +20,7 @@ function loadCartFromLocalStorage() {
 
 // Función para cargar productos desde el archivo JSON
 function loadProductsFromJSON() {
-    fetch('/data.json')  // Ruta ajustada a tu archivo data.json
+    fetch('/data.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al cargar el archivo JSON');
@@ -28,10 +28,10 @@ function loadProductsFromJSON() {
             return response.json();
         })
         .then(data => {
-            stockProductos = data.productos;  // Cargar productos desde el JSON
-            productLimits = data.limites;     // Cargar límites de productos
-            renderProductCards();             // Renderizar los productos en la página
-            updateCart();                     // Actualizar el carrito si hay productos guardados
+            stockProductos = data.productos;
+            productLimits = data.limites;
+            renderProductCards();
+            updateCart();
         })
         .catch(error => {
             console.error('Error al cargar el JSON:', error);
@@ -73,7 +73,7 @@ function renderProductCards() {
     });
 
     container.innerHTML = cardsHTML;
-    assignAddToCartEvents(); // Asignar eventos a los botones "Añadir al carrito"
+    assignAddToCartEvents();
 }
 
 // Función para asignar eventos a los botones "Añadir al carrito"
@@ -81,7 +81,7 @@ function assignAddToCartEvents() {
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', () => {
             const productId = button.getAttribute('data-id');
-            addToCart(productId);  // Añadir producto al carrito
+            addToCart(productId);
         });
     });
 }
@@ -150,8 +150,7 @@ function addToCart(productId) {
             timer: 1500
         });
     }
-
-    updateCart();  // Actualizar el carrito después de añadir un producto
+    updateCart();
 }
 
 // Función para eliminar un producto del carrito
@@ -159,8 +158,8 @@ function removeFromCart(productId) {
     const productIndex = cart.findIndex(item => item.product.id === productId);
 
     if (productIndex !== -1) {
-        cart.splice(productIndex, 1);  // Eliminar producto del carrito
-        updateCart();  // Actualizar el carrito después de eliminar el producto
+        cart.splice(productIndex, 1);
+        updateCart();
     } else {
         console.error(`Producto con id ${productId} no encontrado en el carrito`);
     }
@@ -218,7 +217,6 @@ function showUserDataForm() {
         confirmButtonText: 'Confirmar Compra',
         focusConfirm: false,
         preConfirm: () => {
-            // Obtener los valores del formulario
             const nombre = Swal.getPopup().querySelector('#nombre').value;
             const email = Swal.getPopup().querySelector('#email').value;
             const direccion = Swal.getPopup().querySelector('#direccion').value;
@@ -231,8 +229,6 @@ function showUserDataForm() {
                 Swal.showValidationMessage('Por favor, completa todos los campos');
                 return false;
             }
-
-            // Retornar los datos si son válidos
             return { nombre, email, direccion, provincia, ciudad, codigoPostal };
         }
     }).then((result) => {
@@ -250,9 +246,8 @@ function showUserDataForm() {
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {
-                // Después de mostrar el mensaje de éxito, vaciar el carrito
                 cart = [];
-                updateCart();  // Actualizar el carrito para vaciarlo
+                updateCart();
             });
         }
     });
