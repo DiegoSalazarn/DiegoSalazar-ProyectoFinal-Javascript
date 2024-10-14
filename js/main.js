@@ -11,6 +11,7 @@ function saveCartToLocalStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
 }
 
+// Función para cargar carrito desde LocalStorage
 function loadCartFromLocalStorage() {
     const storedCart = localStorage.getItem(STORAGE_KEY);
     if (storedCart) {
@@ -98,8 +99,8 @@ function updateCart() {
         cartHTML += `
             <div>
                 <span>${item.product.descripcion} - ${item.product.precio}$ x ${item.quantity} = ${subtotal}$</span>
-                <button onclick="changeQuantity('${item.product.id}', 1)">+</button>
-                <button onclick="changeQuantity('${item.product.id}', -1)">-</button>
+                <button class="btn-increment" data-id="${item.product.id}">+</button>
+                <button class="btn-decrement" data-id="${item.product.id}">-</button>
                 <button onclick="removeFromCart('${item.product.id}')">Eliminar</button>
             </div>`;
         total += subtotal;
@@ -111,6 +112,50 @@ function updateCart() {
     // Actualizar el contador de productos en el ícono del carrito
     cartCount.textContent = cart.length;
     saveCartToLocalStorage();
+
+    // Añadir eventos para los botones de incrementar (+) y decrementar (-)
+    document.querySelectorAll('.btn-increment').forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-id');
+            changeQuantity(productId, 1);
+        });
+    });
+
+    document.querySelectorAll('.btn-decrement').forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-id');
+            changeQuantity(productId, -1);
+        });
+    });
+}
+
+// Función para cambiar la cantidad de productos en el carrito
+function changeQuantity(productId, amount) {
+    console.log(`Cambiando cantidad del producto ${productId} por ${amount}`);
+    const productIndex = cart.findIndex(item => item.product.id === productId);
+    const limit = productLimits[productId];
+
+    if (productIndex !== -1) {
+        const newQuantity = cart[productIndex].quantity + amount;
+
+        console.log(`Nueva cantidad: ${newQuantity}`);
+
+        if (newQuantity > limit) {
+            Swal.fire({
+                icon: "warning",
+                title: "Límite alcanzado",
+                text: `No puedes añadir más de ${limit} unidades de este producto.`,
+            });
+        } else if (newQuantity <= 0) {
+            console.log(`Eliminando producto ${productId} del carrito`);
+            removeFromCart(productId);
+        } else {
+            cart[productIndex].quantity = newQuantity;
+            updateCart();
+        }
+    } else {
+        console.error(`Producto con id ${productId} no encontrado en el carrito`);
+    }
 }
 
 // Función para añadir producto al carrito con límite de cantidad
@@ -235,19 +280,45 @@ function showUserDataForm() {
         if (result.isConfirmed) {
             const { nombre, email, direccion, provincia, ciudad, codigoPostal } = result.value;
 
-            // Enviar los datos a la API
-            sendPurchaseToAPI(nombre, email, direccion, provincia, ciudad, codigoPostal);
+            // Crear el resumen de la compra (productos y total)
+            let totalCompra = 0;
+            let resumenProductos = '';
+            cart.forEach(item => {
+                const subtotal = item.product.precio * item.quantity;
+                resumenProductos += `- ${item.product.descripcion}: $${item.product.precio} x ${item.quantity} = $${subtotal}<br>`;
+                totalCompra += subtotal;
+            });
 
-            // Mensaje de éxito
+            // Mostrar confirmación final con resumen de la compra
             Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Compra finalizada con éxito",
-                showConfirmButton: false,
-                timer: 1500
-            }).then(() => {
-                cart = [];
-                updateCart();
+                title: '¿Estás seguro de realizar la compra?',
+                html: `
+                    <strong>Nombre:</strong> ${nombre}<br>
+                    <strong>Email:</strong> ${email}<br>
+                    <strong>Dirección:</strong> ${direccion}, ${ciudad}, ${provincia}, ${codigoPostal}<br><br>
+                    <strong>Productos:</strong><br>
+                    ${resumenProductos}<br>
+                    <strong>Total a pagar:</strong> $${totalCompra}
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, confirmar compra',
+                cancelButtonText: 'Cancelar'
+            }).then((confirmResult) => {
+                if (confirmResult.isConfirmed) {
+                    sendPurchaseToAPI(nombre, email, direccion, provincia, ciudad, codigoPostal);
+                    // Mostrar mensaje de éxito y vaciar el carrito
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Compra finalizada con éxito",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        cart = [];
+                        updateCart();
+                    });
+                }
             });
         }
     });
@@ -255,9 +326,8 @@ function showUserDataForm() {
 
 // Función para enviar la compra a la API
 function sendPurchaseToAPI(nombre, email, direccion, provincia, ciudad, codigoPostal) {
-    const apiEndpoint = 'http://localhost:3000/api/compras';  // Asegúrate de que la URL esté correcta
+    const apiEndpoint = 'http://localhost:3000/api/compras';
 
-    // Construir los datos de la compra
     const purchaseData = {
         nombre: nombre,
         email: email,
@@ -266,13 +336,12 @@ function sendPurchaseToAPI(nombre, email, direccion, provincia, ciudad, codigoPo
         ciudad: ciudad,
         codigoPostal: codigoPostal,
         productos: cart.map(item => ({
-            descripcion: item.product.descripcion,  
-            cantidad: item.quantity,               
-            precio: item.product.precio              
+            descripcion: item.product.descripcion,
+            cantidad: item.quantity,
+            precio: item.product.precio
         }))
     };
 
-    // Enviar la solicitud POST a la API
     fetch(apiEndpoint, {
         method: 'POST',
         headers: {
@@ -302,7 +371,7 @@ function renderCartSidebar() {
             <div class="cart-sidebar-content">
                 <span class="close-sidebar">&times;</span>
                 <h2>Tu Carrito</h2>
-                <div id="cart-items-sidebar"></div> <!-- Este elemento -->
+                <div id="cart-items-sidebar"></div>
                 <p id="total-price-sidebar">Total: 0$</p>
                 <button id="finalizar-compra" class="btn btn-primary">Finalizar Compra</button>
             </div>
@@ -310,12 +379,10 @@ function renderCartSidebar() {
     `;
     document.body.appendChild(sidebarContainer);
 
-    // Cerrar el sidebar
     document.querySelector('.close-sidebar').addEventListener('click', function() {
         closeCartSidebar();
     });
 
-    // Evento del botón "Finalizar Compra" para abrir el modal de datos del usuario
     document.getElementById('finalizar-compra').addEventListener('click', function() {
         if (cart.length === 0) {
             Swal.fire({
@@ -352,9 +419,3 @@ document.querySelector('.navbar-cart a').addEventListener('click', function(even
     event.preventDefault();
     openCartSidebar();
 });
-
-
-
-
-
-
